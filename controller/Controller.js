@@ -1,21 +1,30 @@
-export default function Controller( req,res) {
+import Service from '../service/Service.js'
+
+export default function Controller(req,res) {
+
+    const service = new Service();
 
     this.main = () => {
+        //데이터 가져오기
+        let data = service.main();
+
         //response headers
         res.writeHead(200, { "Content-Type": "application/json" });
         //set the response
-        res.write("Hi there, This is a Vanilla Node.js API");
+        
+        res.write(data);
         //end the response
         res.end();
     }
-    this.internalServerError = () =>{
-        res.writeHead(500,{ "Content-Type": "application/json" })
+
+    this.detail = (param) => {
+        res.writeHead(200, { "Content-Type": "application/json" });
+
     }
+
     this.pageNotFound = () =>{
         res.writeHead(404, { "Content-Type": "application/json" });
         res.end(JSON.stringify({ message: "Route not found" }));
     }
-    this.error = () =>{
-        test();
-    }
+
 };

@@ -6,14 +6,31 @@ export default function Route(req,res) {
 
     console.log("요청 url >>>>>>>>>>>>>  " + req.url);
 
-    if (req.url === "/api" && req.method === "GET") {
-        controller.main();
-    }else if(req.url === "/error" && req.method === "GET"){
-        controller.error();
-    }
+    let reqUrl = req.url.split('/')
+    reqUrl.shift();
 
-    // If no route present
-    else {
-       controller.pageNotFound();
+    const reqMethod = req.method;
+
+    let routing = [
+        {
+            "url":"/api/test/{param1}/{param2}",
+            "paramLength":2,
+            "method":"GET",
+            "controller":controller.main()
+        },
+        {
+            "url":"/api/{param1}/test/{param2}",
+            "paramLength":2,
+            "method":"GET",
+            "controller":controller.main()
+        }
+    ]
+    this.ReturnRoutingTable = ()=>{
+        return routing;
     }
+    // Router(routing, reqUrl, reqMethod);
 }
+
+
+
+
