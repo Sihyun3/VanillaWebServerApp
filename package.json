@@ -1,0 +1,16 @@
+{
+  "name": "vanilla-webserver",
+  "version": "1.0.0",
+  "description": "바닐라 자바스크립트 웹 서버",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "start": "nodemon VanillaWebServerApp.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "nodemon": "^3.0.2"
+  }
+}
