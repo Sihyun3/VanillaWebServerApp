@@ -2,18 +2,22 @@ import http from "http";
 // import https from "https";
 // import fs from "fs";
 import dotenv from "dotenv";
-import Route from "./route/Route.js";
 import Router from "./Config/Router.js"
 
 const PORT = process.env.PORT || 8080;
 dotenv.config();
 
-Router(Route);
+
+let router = new Router();
+
+
 //http
 const server = http.createServer(async (req, res) => {
     //라우터
     try{
-        Router(req, res);
+        // Router(req, res);
+        router.Routing(req,res);
+
     }catch(e){
         console.log(e);
         res.writeHead(500);

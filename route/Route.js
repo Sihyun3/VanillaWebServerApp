@@ -1,34 +1,42 @@
 import Controller from "../controller/Controller.js";
 
-export default function Route(req,res) {
+export default function Route(req, res) {
 
-    const controller = new Controller(req,res);
-
-    console.log("요청 url >>>>>>>>>>>>>  " + req.url);
-
-    let reqUrl = req.url.split('/')
-    reqUrl.shift();
-
-    const reqMethod = req.method;
-
-    let routing = [
+    // const controller = new Controller();
+    let routingTable = [
         {
-            "url":"/api/test/{param1}/{param2}",
-            "paramLength":2,
-            "method":"GET",
-            "controller":controller.main()
+            "url": "/api/{test}/{param1}/{param2}",
+            "method": "GET",
+            "controller": "main"
         },
         {
-            "url":"/api/{param1}/test/{param2}",
-            "paramLength":2,
+            "url": "/api/{test1}/test/",
+            "method": "GET",
+            "controller": "test"
+        },
+        {
+            "url":"/",
             "method":"GET",
-            "controller":controller.main()
-        }
+            "controller":"main"
+        },
+        {
+            "url":"/test/",
+            "method":"GET",
+            "controller":"main"
+        },
+        // {
+        //     "url": "/json",
+        //     "method": "GET",
+        //     "controller": "main"
+        // },
+        // {
+        //     "url": "/json",
+        //     "method": "GET",
+        //     "controller": "main"
+        // },
     ]
-    this.ReturnRoutingTable = ()=>{
-        return routing;
-    }
-    // Router(routing, reqUrl, reqMethod);
+
+    return routingTable;
 }
 
 

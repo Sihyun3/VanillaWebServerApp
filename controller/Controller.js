@@ -4,7 +4,7 @@ export default function Controller(req,res) {
 
     const service = new Service();
 
-    this.main = () => {
+    this.main = (param1,parma2) => {
         //데이터 가져오기
         let data = service.main();
 
@@ -17,8 +17,9 @@ export default function Controller(req,res) {
         res.end();
     }
 
-    this.detail = (param) => {
-        res.writeHead(200, { "Content-Type": "application/json" });
+    this.test = (param) => {
+        res.writeHead(200);
+        res.end(param);
 
     }
 
