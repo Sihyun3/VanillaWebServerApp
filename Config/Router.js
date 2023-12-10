@@ -1,12 +1,13 @@
 import Controller from "../controller/Controller.js";
 import Route from '../route/Route.js';
-
+import RequestConfig from "./RequestConfig.js";
 
 
 export default function Router(reqUrl, reqMethod) {
+    let data = [];
     let defaultTable = Route();
     let tree = {};
-    let data = [];
+
     defaultTable.forEach((e, i) => {
         data[i] = [];
         if ("/" == e.url.charAt(e.url.length - 1) && e.url.length > 2) {
@@ -15,63 +16,39 @@ export default function Router(reqUrl, reqMethod) {
         data[i] = e.url.split('/');
         data[i].push(e.method);
         data[i].push(e.controller);
-        data[i].shift();
+        if (data[i][0] == '') {
+            data[i].shift();
+        }
     })
-    data.forEach((element, i) => {
-        const param = "{param}"
-        let variTree = {};
-        // if(element[0] == })
-        const regex = /\{.*\}/;
-        for (let i = 0; i < element.length - 2; i++) {
-            if (regex.test(element[i])) {
-                element[i] = param;
+    for (let idx = 0; idx < data.length; idx++) {
+        urlTree(data[idx], idx);
+    }
+
+    function urlTree(data, idx) {
+        let variTree = tree;
+        for (let i = 0; i < data.length - 2; i++) {
+            let element = data[i];
+            if (!variTree[element]) {
+                variTree[element] = {};
             }
+            variTree = variTree[element];
         }
-        let firstElement = element[0];
-        if (tree[firstElement] == undefined) {
-            tree[firstElement] = {}
-        }
-        variTree = tree[firstElement]
-        if (variTree[element[1]]) {
-            variTree = variTree[element[1]];
-        } else {
-            variTree[element[1]] = {};
-        }
-        variTree = tree[firstElement]
-        for (let i = 2; i < element.length - 2; i++) {
-            let now = element[i]
-            let prev = element[i - 1];
-            variTree = variTree[prev];
-            if (variTree[now] == undefined) {
-                variTree[now] = {};
-            }
-        }
-        if (element.length > 3) {
-            variTree = variTree[element[element.length - 3]];
-        }
+
         try {
-            if (variTree[element[element.length - 2]] == element[element.length - 1]) {
-                let idx = i + 1;
-                throw new Error(`라우팅 테이블 ${idx} 번째에 중복 되는 url(${element})  존재 합니다.`);
+            if (variTree[data[data.length - 2]] != undefined) {
+                let count = idx + 1;
+                throw new Error(`라우팅 테이블 ${count} 번째에 중복 되는 url(${data})  존재 합니다.`);
+            } else {
+                variTree[data[data.length - 2]] = data[data.length - 1];
             }
         } catch (error) {
             console.error(error);
             process.exit(1);
         }
+    }
 
-        variTree[element[element.length - 2]] = element[element.length - 1];
-
-    });
-
-    console.log(tree);
-
-
-
-
-
-
-    this.Routing = (req, res) => {
-
+    this.Routing = async (req, res) => {
+        await RequestConfig(req);
         const controller = new Controller(req, res);
         let url = req.url.split('/');
         url.shift();
@@ -90,7 +67,6 @@ export default function Router(reqUrl, reqMethod) {
                 return controller.pageNotFound();
             }
         }
-        // console.log(variTree);
 
         if (variTree[req.method]) {
             const funName = variTree[req.method];
@@ -99,22 +75,7 @@ export default function Router(reqUrl, reqMethod) {
         } else {
             return controller.pageNotFound();
         }
-        // console.log(variTree);
-        // console.log(tree);
-
-        // const myString = "이 문자열에는 {중괄호}가 포함되어 있습니다.";
-        // const regex = /\{.*\}/;
-
-        // if (regex.test(myString)) {
-
-
-        // const funName = RoutingTable[0].controller;
-        // let controllerFun = controller[funName];
-        // controllerFun("1", "2");
     }
-
-
-
 
 }
 

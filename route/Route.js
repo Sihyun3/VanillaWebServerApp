@@ -5,14 +5,9 @@ export default function Route(req, res) {
     // const controller = new Controller();
     let routingTable = [
         {
-            "url": "/api/{test}/{param1}/{param2}",
+            "url": "/api",
             "method": "GET",
-            "controller": "main"
-        },
-        {
-            "url": "/api/{test1}/test/",
-            "method": "GET",
-            "controller": "test"
+            "controller": "getBoard"
         },
         {
             "url":"/",
@@ -20,20 +15,15 @@ export default function Route(req, res) {
             "controller":"main"
         },
         {
-            "url":"/test/",
-            "method":"GET",
-            "controller":"main"
+            "url":"/api/edit",
+            "method":"POST",
+            "controller":"edit"
         },
-        // {
-        //     "url": "/json",
-        //     "method": "GET",
-        //     "controller": "main"
-        // },
-        // {
-        //     "url": "/json",
-        //     "method": "GET",
-        //     "controller": "main"
-        // },
+        {
+            "url":"/api/{param}",
+            "method":"GET",
+            "controller":"detail"
+        }
     ]
 
     return routingTable;
