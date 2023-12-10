@@ -1,4 +1,5 @@
 import Service from '../service/Service.js'
+import FileConfig from '../Config/FileConfig.js';
 
 export default function Controller(req, res) {
 
@@ -16,7 +17,16 @@ export default function Controller(req, res) {
         //end the response
         res.end();
     }
-
+    this.image = async (imageName) => {
+        let splitImage = imageName.split('.')
+        res.writeHead(200, { "Content-Type":"image"+splitImage[1] })
+        FileConfig(imageName,res);
+    }
+    this.download = async (fileName) => {
+        res.setHeader("Content-Disposition","attachment; filename=\"" + fileName + "\"")
+        res.writeHead(200, { "Content-Type":"application/octet-stream" })
+        FileConfig(fileName,res);
+    }
     this.getBoard = async () => {
         let data = await service.getData();
         res.writeHead(200, { "Content-Type": "application/json" });
@@ -29,7 +39,7 @@ export default function Controller(req, res) {
         res.writeHead(200);
         res.end();
     }
-    this.detail = async (idx) =>{
+    this.detail = async (idx) => {
         let data = await service.detail(idx);
         res.writeHead(200, { "Content-Type": "application/json" });
         res.end(data);

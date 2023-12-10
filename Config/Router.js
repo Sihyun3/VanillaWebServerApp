@@ -1,7 +1,7 @@
 import Controller from "../controller/Controller.js";
 import Route from '../route/Route.js';
 import RequestConfig from "./RequestConfig.js";
-
+import CorsConfig from "./CorsConfig.js"
 
 export default function Router(reqUrl, reqMethod) {
     let data = [];
@@ -24,10 +24,16 @@ export default function Router(reqUrl, reqMethod) {
         urlTree(data[idx], idx);
     }
 
+    
     function urlTree(data, idx) {
+        const param = "{param}";
+        const regex = /\{.*\}/;
         let variTree = tree;
         for (let i = 0; i < data.length - 2; i++) {
             let element = data[i];
+            if (regex.test(element)) {
+                element = param;
+            }
             if (!variTree[element]) {
                 variTree[element] = {};
             }
@@ -46,9 +52,12 @@ export default function Router(reqUrl, reqMethod) {
             process.exit(1);
         }
     }
+    console.log(tree);
 
     this.Routing = async (req, res) => {
-        await RequestConfig(req);
+        
+        CorsConfig(res);
+
         const controller = new Controller(req, res);
         let url = req.url.split('/');
         url.shift();
@@ -69,6 +78,7 @@ export default function Router(reqUrl, reqMethod) {
         }
 
         if (variTree[req.method]) {
+            await RequestConfig(req);
             const funName = variTree[req.method];
             let controllerFun = controller[funName];
             controllerFun(...param);

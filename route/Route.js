@@ -20,10 +20,21 @@ export default function Route(req, res) {
             "controller":"edit"
         },
         {
-            "url":"/api/{param}",
+            "url":"/api/{idx}",
             "method":"GET",
             "controller":"detail"
-        }
+        },
+        {
+            "url":"/image/{imageName}",
+            "method":"GET",
+            "controller":"image"
+        },
+        {
+            "url":"/download/{imageName}",
+            "method":"GET",
+            "controller":"download"
+        },
+        
     ]
 
     return routingTable;
