@@ -7,13 +7,19 @@ export default function Controller(req, res) {
 
     this.main = (param1, parma2) => {
         //데이터 가져오기
+
+        // res.statusCode = 404;
+        throw new Error("예외");
+
+        res.statusCode = 200;
+        res.setHeader( "Content-Type","application/json" );
         let data = service.main();
 
         //response headers
-        res.writeHead(200, { "Content-Type": "application/json" });
         //set the response
 
-        res.write(data);
+        // res.write(data);
+        res.write("abc");
         //end the response
         res.end();
     }
@@ -22,11 +28,13 @@ export default function Controller(req, res) {
         res.writeHead(200, { "Content-Type":"image"+splitImage[1] })
         FileConfig(imageName,res);
     }
+    
     this.download = async (fileName) => {
         res.setHeader("Content-Disposition","attachment; filename=\"" + fileName + "\"")
         res.writeHead(200, { "Content-Type":"application/octet-stream" })
         FileConfig(fileName,res);
     }
+
     this.getBoard = async () => {
         let data = await service.getData();
         res.writeHead(200, { "Content-Type": "application/json" });

@@ -7,6 +7,7 @@ export default function Service() {
 
     this.main = () => {
         let data = mapper.main();
+        throw new Error("예외");
         return data;
     }
 
